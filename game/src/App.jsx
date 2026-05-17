@@ -1,122 +1,162 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    const [score, setScore] = useState(0);
+    const [player, setPlayer] = useState(null);
+    const [house, setHouse] = useState(null);
+    const [thinking, setThinking] = useState(false)
+    const [result, setResult] = useState(null)
 
-      <div className="ticks"></div>
+    const play = (choice) => {
+        setPlayer(choice);
+        setThinking(true);
+        setResult(null);
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        const choices = ["rock", "paper", "scissors"];
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        setTimeout(() => {
+            const random = choices[Math.floor(Math.random() * 3)];
+            setHouse(random);
+            setThinking(false);
+
+            // logique du résultat
+            if (choice === random) {
+                setResult("draw");
+            }
+            else if (
+                (choice === "rock" && random === "scissors") ||
+                (choice === "scissors" && random === "paper") ||
+                (choice === "paper" && random === "rock")
+            ) {
+                setResult("win");
+                setScore(prev => prev + 1);
+            }
+            else {
+                setResult("lose");
+            }
+
+        }, 1500);
+    };
+
+    return (
+        <div className="container">
+
+            <div className="row">
+                <div className="col-2"></div>
+
+                <div className="col-8 border mt-5 p-3 rounded-3">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <img src="/images/logo.svg" alt="logo" />
+
+                        <div className="p-2 bg-white d-flex flex-column justify-content-center align-items-center rounded-3">
+                            score
+                            <span className="fs-1">{score}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-2"></div>
+            </div>
+
+            {player === null ? (
+                <div className="game col-8 d-flex justify-content-center align-items-center">
+                    <div
+                        style={{
+                            backgroundImage: "url(/images/bg-triangle.svg)",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            width: "400px",
+                            height: "400px",
+                            position: "relative",
+                            left: "200px",
+                            top: "100px",
+                        }}
+                    >
+                        <div
+                            className="bg-primary d-flex justify-content-center align-items-center rounded-circle"
+                            style={{ width: "170px", height: "170px" }}
+                        >
+                            <img
+                                src="/images/icon-rock.svg"
+                                alt="rock"
+                                onClick={() => play("rock")}
+                            />
+                        </div>
+
+                        <div
+                            className="bg-warning d-flex justify-content-center align-items-center rounded-circle paper"
+                            style={{ width: "170px", height: "170px" }}
+                        >
+                            <img
+                                src="/images/icon-paper.svg"
+                                alt="paper"
+                                onClick={() => play("paper")}
+                            />
+                        </div>
+
+                        <div
+                            className="bg-danger d-flex justify-content-center align-items-center rounded-circle scissors"
+                            style={{ width: "170px", height: "170px" }}
+                        >
+                            <img
+                                src="/images/icon-scissors.svg"
+                                alt="scissors"
+                                onClick={() => play("scissors")}
+                            />
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="d-flex justify-content-center align-items-center gap-5 mt-4">
+
+                    <div className="text-center">
+                        <h4>YOU PICKED</h4>
+                        <img
+                            src={`/images/icon-${player}.svg`}
+                            alt={player}
+                            style={{ width: "120px" }}
+                        />
+                    </div>
+
+                    {result && (
+                        <div className="text-center">
+                            {result === "win" && <h2 className="text-success">YOU WIN 🎉</h2>}
+                            {result === "lose" && <h2 className="text-danger">YOU LOSE 😢</h2>}
+                            {result === "draw" && <h2 className="text-warning">DRAW 🤝</h2>}
+
+                            <button
+                                className="btn btn-dark mt-3"
+                                onClick={() => {
+                                    setPlayer(null);
+                                    setHouse(null);
+                                    setResult(null);
+                                    setThinking(false);
+                                }}
+                            >
+                                PLAY AGAIN
+                            </button>
+                        </div>
+                    )}
+
+                    <div className="text-center">
+                        <h4>THE HOUSE PICKED</h4>
+                        {house && (
+                        <img
+                            src={`/images/icon-${house}.svg`}
+                            alt={house}
+                            style={{ width: "120px" }}
+                        />
+                        )}
+                    </div>
+
+                </div>
+            )}
+
+        </div>
+    );
 }
 
-export default App
+export default App;
